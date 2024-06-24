@@ -3,3 +3,7 @@
 import {main} from '../models';
 
 export function GetDrives():Promise<Array<main.DiskInfo>>;
+
+export function GetStandardFilePaths():Promise<main.QuickPaths>;
+
+export function ReadDirectory(arg1:string):Promise<main.DirResponse>;

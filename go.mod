@@ -1,4 +1,4 @@
-module changeme
+module gofileexplorer
 
 go 1.18
 

@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"os"
+	"path"
+	"time"
 
 	"golang.org/x/sys/windows"
 )
@@ -17,6 +19,28 @@ type DiskInfo struct {
 	FreeBytesAvialable uint64
 	Bytes              uint64
 	FreeBytes          uint64
+}
+
+type QuickPaths struct {
+	Desktop   string
+	Downloads string
+	Documents string
+	Pictures  string
+	Music     string
+	Movies    string
+}
+
+type DirResponse struct {
+	Status uint32
+	Data   []DirEntry
+	Error  error
+}
+
+type DirEntry struct {
+	Name    string
+	IsDir   bool
+	ModTime time.Time
+	Size    int64
 }
 
 // NewApp creates a new App application struct
@@ -47,4 +71,79 @@ func (a *App) GetDrives() (drives []DiskInfo) {
 		}
 	}
 	return
+}
+
+func (a *App) GetStandardFilePaths() QuickPaths {
+	desktopPath, err := windows.KnownFolderPath(windows.FOLDERID_Desktop, 0)
+	if err != nil {
+		panic("An error occured")
+	}
+	downloadsPath, err := windows.KnownFolderPath(windows.FOLDERID_Downloads, 0)
+	if err != nil {
+		panic("An error occured")
+	}
+	documentsPath, err := windows.KnownFolderPath(windows.FOLDERID_Documents, 0)
+	if err != nil {
+		panic("An error occured")
+	}
+	picturesPath, err := windows.KnownFolderPath(windows.FOLDERID_Pictures, 0)
+	if err != nil {
+		panic("An error occured")
+	}
+	musicPath, err := windows.KnownFolderPath(windows.FOLDERID_Music, 0)
+	if err != nil {
+		panic("An error occured")
+	}
+	moviesPath, err := windows.KnownFolderPath(windows.FOLDERID_Videos, 0)
+	if err != nil {
+		panic("An error occured")
+	}
+
+	return QuickPaths{
+		Desktop:   desktopPath,
+		Downloads: downloadsPath,
+		Documents: documentsPath,
+		Pictures:  picturesPath,
+		Music:     musicPath,
+		Movies:    moviesPath,
+	}
+}
+
+func (a *App) ReadDirectory(dirPath string) DirResponse {
+	entries, err := os.ReadDir(path.Clean(dirPath))
+	if err != nil {
+		if os.IsNotExist(err) {
+			return DirResponse{
+				Status: 404,
+				Data:   []DirEntry{},
+				Error:  err,
+			}
+		}
+		return DirResponse{
+			Status: 500,
+			Data:   []DirEntry{},
+			Error:  err,
+		}
+	}
+
+	var processedEntries []DirEntry
+
+	for i := range entries {
+		info, err := entries[i].Info()
+		if err != nil {
+			continue
+		}
+		processedEntries = append(processedEntries, DirEntry{
+			Name:    info.Name(),
+			IsDir:   info.IsDir(),
+			ModTime: info.ModTime(),
+			Size:    info.Size(),
+		})
+	}
+
+	return DirResponse{
+		Status: 200,
+		Data:   processedEntries,
+		Error:  nil,
+	}
 }

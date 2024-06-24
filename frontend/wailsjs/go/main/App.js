@@ -5,3 +5,11 @@
 export function GetDrives() {
   return window['go']['main']['App']['GetDrives']();
 }
+
+export function GetStandardFilePaths() {
+  return window['go']['main']['App']['GetStandardFilePaths']();
+}
+
+export function ReadDirectory(arg1) {
+  return window['go']['main']['App']['ReadDirectory'](arg1);
+}
