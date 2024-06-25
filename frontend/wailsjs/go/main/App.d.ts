@@ -7,3 +7,5 @@ export function GetDrives():Promise<Array<main.DiskInfo>>;
 export function GetStandardFilePaths():Promise<main.QuickPaths>;
 
 export function ReadDirectory(arg1:string):Promise<main.DirResponse>;
+
+export function SearchDirectory(arg1:string,arg2:string):Promise<void>;

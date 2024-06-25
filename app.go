@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
+	"io/fs"
 	"os"
 	"path"
+	"path/filepath"
 	"time"
 
+	"github.com/lithammer/fuzzysearch/fuzzy"
 	"golang.org/x/sys/windows"
 )
 
@@ -146,4 +149,13 @@ func (a *App) ReadDirectory(dirPath string) DirResponse {
 		Data:   processedEntries,
 		Error:  nil,
 	}
+}
+
+func (a *App) SearchDirectory(dirPath string, searchString string) {
+	filepath.WalkDir(dirPath, func(path string, d fs.DirEntry, err error) error {
+		if fuzzy.Match(searchString, d.Name()) && path != dirPath {
+
+		}
+		return nil
+	})
 }

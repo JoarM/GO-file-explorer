@@ -46,7 +46,7 @@ const router = createHashRouter([
                         path: "/path/*",
                         element: <FilePath />,
                         loader: async ({ params }) => {
-                            const res = await ReadDirectory(params["*"] as string)
+                            const res = await ReadDirectory((params["*"] as string).replace("/", "\\"))
                             if (res.Status === 200) {
                                 return res.Data
                             }

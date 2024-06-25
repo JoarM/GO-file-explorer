@@ -3,10 +3,11 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/componen
 import { Separator } from "@/components/ui/separator"
 import { $drives } from "@/lib/state"
 import { useStore } from "@nanostores/react"
-import { ArrowLeft, ArrowRight, ChevronRight, Computer, Disc3, Download, FileText, HardDrive, House, Images, Monitor, PlaySquare, RotateCw } from "lucide-react"
+import { ArrowLeft, ArrowRight, ChevronRight, Computer, Disc3, Download, FileText, HardDrive, House, Images, Monitor, PlaySquare, RotateCw, Search } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { Link, Outlet, useLoaderData, useNavigate } from "react-router-dom"
+import { Input } from "@/components/ui/input"
 
 export default function Layout() {
     const drives = useStore($drives)
@@ -16,32 +17,45 @@ export default function Layout() {
 
     return (
         <>
-            <nav className="p-1.5 border-b flex gap-1">
-                <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <nav className="p-1.5 border-b flex">
+                <Button className="flex-shrink-0 mr-1" variant="ghost" size="icon" onClick={() => navigate(-1)}>
                     <ArrowLeft
                     size={16}
                     className="size-4"
                     />
                     <span className="sr-only">Navigate back</span>
                 </Button>
-                <Button variant="ghost" size="icon" onClick={() => navigate(+1)}>
+                <Button className="flex-shrink-0 mr-1" variant="ghost" size="icon" onClick={() => navigate(+1)}>
                     <ArrowRight
                     size={16}
                     className="size-4"
                     />
                     <span className="sr-only">Navigate forward</span>
                 </Button>
-                <Button variant="ghost" size="icon" onClick={() => navigate(0)}>
+                <Button className="flex-shrink-0 mr-1.5" variant="ghost" size="icon" onClick={() => navigate(0)}>
                     <RotateCw
                     size={16}
                     className="size-4"
                     />
                     <span className="sr-only">Refresh page</span>
                 </Button>
+                <span className="bg-muted/50 w-full h-9 border rounded-lg mr-1.5">
+
+                </span>
+                <span className="relative ml-auto h-fit">
+                    <Input 
+                    className="w-60 pr-7 bg-muted/50"
+                    />
+                    <Search 
+                    size={16}
+                    className="size-4 absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                    />
+                </span>
             </nav>
             <div className="h-[calc(100vh-53px)]">
                 <ResizablePanelGroup
                 direction="horizontal"
+                autoSaveId="persistance"
                 >
                     <ResizablePanel defaultSize={20} className=" overflow-y-scroll">
                         <nav className="p-1">
@@ -138,7 +152,9 @@ export default function Layout() {
                         </nav>
                     </ResizablePanel>
                     <ResizableHandle />
-                    <ResizablePanel>
+                    <ResizablePanel style={{
+                        overflow: "auto"
+                    }}>
                         <Outlet />
                     </ResizablePanel>
                 </ResizablePanelGroup>

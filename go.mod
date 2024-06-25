@@ -3,6 +3,7 @@ module gofileexplorer
 go 1.18
 
 require (
+	github.com/lithammer/fuzzysearch v1.1.5
 	github.com/wailsapp/wails/v2 v2.6.0
 	golang.org/x/sys v0.8.0
 )

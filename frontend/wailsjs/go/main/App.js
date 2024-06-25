@@ -13,3 +13,7 @@ export function GetStandardFilePaths() {
 export function ReadDirectory(arg1) {
   return window['go']['main']['App']['ReadDirectory'](arg1);
 }
+
+export function SearchDirectory(arg1, arg2) {
+  return window['go']['main']['App']['SearchDirectory'](arg1, arg2);
+}
