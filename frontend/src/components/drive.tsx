@@ -11,7 +11,7 @@ export function DriveCompenent({
     FreeBytes
 }: Drive) {
     return (
-        <Link to={`/path/${Name}\\`} className="rounded-sm inline-flex p-2 hover:bg-muted transition-colors items-center w-64">
+        <Link to={`/${Name}\\`} className="rounded-sm inline-flex p-2 hover:bg-muted transition-colors items-center w-64">
             <HardDrive 
             size={32}
             className="size-8 mr-2"

@@ -6,7 +6,7 @@ import { useStore } from "@nanostores/react"
 import { ArrowLeft, ArrowRight, ChevronRight, Computer, Disc3, Download, FileText, HardDrive, House, Images, Monitor, PlaySquare, RotateCw, Search } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { Link, Outlet, useLoaderData, useNavigate } from "react-router-dom"
+import { Form, Link, Outlet, useLoaderData, useLocation, useNavigate } from "react-router-dom"
 import { Input } from "@/components/ui/input"
 
 export default function Layout() {
@@ -14,6 +14,7 @@ export default function Layout() {
     const [pcExpanded, setPcExpanded] = useState(false)
     const navigate = useNavigate()
     const { Desktop, Downloads, Documents, Pictures, Music, Movies } = useLoaderData() as any
+    const location = useLocation()
 
     return (
         <>
@@ -40,17 +41,19 @@ export default function Layout() {
                     <span className="sr-only">Refresh page</span>
                 </Button>
                 <span className="bg-muted/50 w-full h-9 border rounded-lg mr-1.5">
-
+                    {location.pathname}
                 </span>
-                <span className="relative ml-auto h-fit">
-                    <Input 
-                    className="w-60 pr-7 bg-muted/50"
-                    />
-                    <Search 
-                    size={16}
-                    className="size-4 absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
-                    />
-                </span>
+                <Form method="GET" action="">
+                    <span className="relative h-fit">
+                        <Input 
+                        className="w-60 pr-7 bg-muted/50"
+                        />
+                        <Search 
+                        size={16}
+                        className="size-4 absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                        />
+                    </span>
+                </Form>
             </nav>
             <div className="h-[calc(100vh-53px)]">
                 <ResizablePanelGroup
@@ -60,7 +63,7 @@ export default function Layout() {
                     <ResizablePanel defaultSize={20} className=" overflow-y-scroll">
                         <nav className="p-1">
                             <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-                                <Link to={`/path/${Desktop}`}>
+                                <Link to={`/${Desktop}`}>
                                     <Monitor
                                     size={16} 
                                     className="size-4 mr-2 flex-shrink-0" 
@@ -69,7 +72,7 @@ export default function Layout() {
                                 </Link>
                             </Button>
                             <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-                                <Link to={`/path/${Downloads}`}>
+                                <Link to={`/${Downloads}`}>
                                     <Download
                                     size={16} 
                                     className="size-4 mr-2 flex-shrink-0" 
@@ -78,7 +81,7 @@ export default function Layout() {
                                 </Link>
                             </Button>
                             <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-                                <Link to={`/path/${Documents}`}>
+                                <Link to={`/${Documents}`}>
                                     <FileText
                                     size={16} 
                                     className="size-4 mr-2 flex-shrink-0" 
@@ -87,7 +90,7 @@ export default function Layout() {
                                 </Link>
                             </Button>
                             <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-                                <Link to={`/path/${Pictures}`}>
+                                <Link to={`/${Pictures}`}>
                                     <Images 
                                     size={16} 
                                     className="size-4 mr-2 flex-shrink-0" 
@@ -96,7 +99,7 @@ export default function Layout() {
                                 </Link> 
                             </Button>
                             <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-                                <Link to={`/path/${Music}`}>
+                                <Link to={`/${Music}`}>
                                     <Disc3 
                                     size={16} 
                                     className="size-4 mr-2 flex-shrink-0" 
@@ -105,7 +108,7 @@ export default function Layout() {
                                 </Link>
                             </Button>
                             <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-                                <Link to={`/path/${Movies}`}>
+                                <Link to={`/${Movies}`}>
                                     <PlaySquare 
                                     size={16} 
                                     className="size-4 mr-2 flex-shrink-0" 
@@ -123,7 +126,7 @@ export default function Layout() {
                                         />
                                         <span className="sr-only">Expand</span>
                                     </button>
-                                    <Link to="path" className="inline-flex">
+                                    <Link to="/" className="inline-flex">
                                         <Computer 
                                         size={16}
                                         className="size-4 mr-2 flex-shrink-0"
@@ -137,7 +140,7 @@ export default function Layout() {
                                     {drives.map(drive => {
                                         return (
                                             <Button variant="ghost" size="sm" className="w-full justify-start pl-8" asChild>
-                                                <Link to={`path/${drive.Name}\\`}>
+                                                <Link to={`/${drive.Name}\\`}>
                                                     <HardDrive
                                                     size={16}
                                                     className="size-4 mr-2 flex-shrink-0"

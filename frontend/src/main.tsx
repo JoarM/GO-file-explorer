@@ -1,15 +1,14 @@
 import React from 'react'
 import {createRoot} from 'react-dom/client'
 import './style.css'
-import App from './app/page'
 import { RouterProvider, createHashRouter } from 'react-router-dom'
 import Layout from './app/layout'
-import ThisPc from './app/path/page'
 import { ThemeProvider } from './components/theme-provider'
 import { GetDrives, GetStandardFilePaths, ReadDirectory } from "../wailsjs/go/main/App"
 import { $drives } from './lib/state'
 import ErrorPage from './app/error'
-import FilePath from './app/path/[filePath]/page'
+import FilePath from './app/[filePath]/page'
+import ThisPc from './app/page'
 
 const container = document.getElementById('root')
 
@@ -31,19 +30,15 @@ const router = createHashRouter([
                 children: [
                     {
                         index: true,
-                        element: <App />
-                    },
-                    {
-                        path: "/path",
                         element: <ThisPc />,
                         loader: async () => {
                             const drives = await GetDrives()
                             $drives.set(drives)
-                            return null
+                            return await GetStandardFilePaths()
                         }
                     },
                     {
-                        path: "/path/*",
+                        path: "/*",
                         element: <FilePath />,
                         loader: async ({ params }) => {
                             const res = await ReadDirectory((params["*"] as string).replace("/", "\\"))
@@ -57,6 +52,7 @@ const router = createHashRouter([
                                     statusText: `${params["*"]} dosen't exist`,
                                 })
                             }
+                            throw new Error(res.Error)
                         }
                     }
                 ]
